@@ -2,81 +2,107 @@
 (function($) {
     var methods = {
         init: function(options) {
-
             var defaults = {
-                onComplete: function() {}
+                feedLoaderClass: 'feed_loader',
+                feedWrapperClass: 'feed_wrapper',
+                feedHeaderClass: 'feed_header',
+                feedScreenNameClass: 'feed_screen_name',
+                feedProfileImageClass: 'feed_profile_image',
+                feedContentClass: 'feed_content',
+                feedPostsContentClass: 'feed_post',
+                feedShowMoreClass: 'feed_sow_more',
+
+                feedPosts: 3, // Feed posts to show on load
+                feedIncrement: 3, // Consecutive number of feed post to show on "show more" button click
+                feedMax: 20, // Max number of posts to pull in total, totalEntries will not go beyond this number, cannot excced 20 because of Google API in use
+                imgSize: 50 // Max is 250
             };
 
             var settings = $.extend({}, defaults, options);
 
             return this.each(function() {
-                console.log(settings.id);
+                var selector = $(this);
 
+                // Create feed DOM elements.
+                var feedContainer = $('<div id="feed_for_' + selector.attr('class') + '"class="kyco_googleplusfeed"></div>');
+                var feedLoader = $('<div class="' + settings.feedLoaderClass + '">Loading...</div>');
+                var feedWrapper = $('<div class="' + settings.feedWrapperClass + '"></div>');
+                var feedHeader =  $('<div class="' + settings.feedHeaderClass + '"></div>');
+                var feedScreenName = $('<h3 class="' + settings.feedScreenNameClass + '"></h3>');
+                var feedProfileImage = $('<a href="#" class="' + settings.feedProfileImageClass + '" target="_blank"></a>');
+                var feedContent = $('<div class="' + settings.feedContentClass + '"></div>');
+                var feedShowMore = $('<span class="' + settings.feedShowMoreClass + '">Show more</span>');
 
+                feedHeader.append(feedProfileImage, feedScreenName);
+                feedWrapper.append(feedHeader, feedContent, feedShowMore);
+                feedContainer.append(feedLoader, feedWrapper);
+                selector.append(feedContainer);
 
-                var feedLoaderClass = '.feed_loader';
-                var feedContentClass = '.feed_content';
-                var feedShowMoreClass = '.feed_show_more';
-
-                var INITIAL = 3; // Feed posts to show on load
-                var INCREMENT = 6; // Consecutive number of feed post to show on "show more" button click
-                var MAX = 20; // Max number of posts to pull in total, NUM_ENTRIES will not go beyond this number, cannot excced 20 because of Google API in use
-                var IMG_SIZE = 100; // Max is 250
+                // Main functionality
                 var googlePlusFeed = new GoogleFeed(settings.id);
 
                 function initFeed() {
                     var feedEntries = googlePlusFeed.entries;
-                    var NUM_ENTRIES = feedEntries.length;
+                    var totalEntries = feedEntries.length;
                     var newLimit = 0;
                     var showMore = false;
                     var i = 0;
-                    var j = INITIAL;
+                    var j = settings.feedPosts;
                     var str = '';
 
                     if (feedEntries.length > 0) {
-                        for (i; i < INITIAL; i++) {
-                            str += '<div class="feed_post_' + (i + 1) + '">';
-                            str += '<p>' + '<h5>' + (i +1) + '</h5>' + feedEntries[i].contentSnippet + '</p>';
+                        for (i; i < settings.feedPosts; i++) {
+                            str += '<div class="' + settings.feedPostsContentClass + ' post_' + (i + 1) + '">';
+                            str += '<span>Shared publicly - ' + feedEntries[i].publishedDate.substr(0, 16) + '</span>';
+                            str += '<p>' + feedEntries[i].contentSnippet + '</p>';
                             str += '<a href="' + feedEntries[i].link + '" target="_blank">View post</a>';
-                            str += '</div><hr />';
+                            str += '</div>';
                         }
-                        $('#google_plus_feed .feed_title').html('<a href="https://plus.google.com/' + googlePlusFeed.id + '" target="_blank">' + googlePlusFeed.screenName + '</a>');
-                        $('#google_plus_feed .feed_image').attr('src', googlePlusFeed.image);
-                        $('#google_plus_feed .feed').html(str);
 
-                        $(feedContentClass).fadeIn(300);
-                        $(feedShowMoreClass).click(function() {
-                            if (newLimit <= NUM_ENTRIES) {
-                                newLimit += showMore ? INCREMENT : INITIAL + INCREMENT;
-                                newLimit = newLimit > NUM_ENTRIES ? NUM_ENTRIES : newLimit;
+                        feedScreenName.html('<a href="' + googlePlusFeed.url + '" target="_blank">' + googlePlusFeed.screenName + '</a>');
+                        feedProfileImage.attr('href', googlePlusFeed.url);
+                        feedProfileImage.append('<img src="' + googlePlusFeed.image + '" />');
+                        feedContent.html(str);
+
+                        feedContent.animate({scrollTop: 0}, 1); // Force scroll to top of content                        
+
+                        feedWrapper.fadeIn(300);
+                        feedShowMore.click(function() {
+                            if (newLimit <= totalEntries) {
+                                newLimit += showMore ? settings.feedIncrement : settings.feedPosts + settings.feedIncrement;
+                                newLimit = newLimit > totalEntries ? totalEntries : newLimit;
 
                                 for (j; j < newLimit; j++) {
-                                    str += '<div class="feed_post_' + (j + 1) + '">';
-                                    str += '<p>' + '<h5>' + (j + 1) + '</h5>' + feedEntries[j].contentSnippet + '</p>';
+                                    str += '<div class="' + settings.feedPostsContentClass + ' post_' + (j + 1) + '">';
+                                    str += '<span>Shared publicly - ' + feedEntries[j].publishedDate.substr(0, 16) + '</span>';
+                                    str += '<p>' + feedEntries[j].contentSnippet + '</p>';
                                     str += '<a href="' + feedEntries[j].link + '" target="_blank">View post</a>';
-                                    str += '</div><hr />';
+                                    str += '</div>';
 
-                                    if (j === (NUM_ENTRIES - 1)) {
-                                        $(feedShowMoreClass).unbind('click');
-                                        $(feedShowMoreClass).text('View more posts on Google+').click(function() {
+                                    if (j === (totalEntries - 1)) {
+                                        feedShowMore.unbind('click').addClass('link');
+                                        feedShowMore.text('View more posts on Google+').click(function() {
                                             window.open(googlePlusFeed.url);
                                         });
                                     }
                                 }
 
+                                feedContent.animate({scrollTop: feedContent[0].scrollHeight}, 500);
                                 showMore = true;
                             }
-                            $('#google_plus_feed .feed').html(str);
+                            feedContent.html(str);
                         });
                     } else {
-                        console.log('no entries for ' + googlePlusFeed.screenName);
+                        var noPostsMessage = 'Nothing to show.' + googlePlusFeed.screenName + ' has an empty feed.';
+                        console.log(noPostsMessage);
+                        feedContent.html(noPostsMessage);
                     }
                 }
 
                 function GoogleFeed(id) {
                     var self = this;
                     self.id = id;
-                    self.image = 'https://plus.google.com/s2/photos/profile/' + self.id + '?sz=' + IMG_SIZE;
+                    self.image = 'https://plus.google.com/s2/photos/profile/' + self.id + '?sz=' + settings.imgSize;
                     self.url = 'https://plus.google.com/' + self.id;
                     self.init = function() {
                         initFeed();
@@ -84,7 +110,7 @@
 
                     $.ajax({
                         // Retrieve RSS feed using a handy Google API
-                        url: 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=' + MAX + '&callback=?&q=' + encodeURIComponent('http://plusfeed.frosas.net/' + self.id),
+                        url: 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=' + settings.feedMax + '&callback=?&q=' + encodeURIComponent('http://plusfeed.frosas.net/' + self.id),
                         dataType: 'json',
                         success: function(response) {
                             try {
@@ -99,22 +125,23 @@
 
                                 // Preload profile image and only trigger feed thereafter
                                 $('<img src="' + self.image + '"/>').load(function() {
-                                    $(feedLoaderClass).fadeOut(300, function() {
+                                    feedLoader.fadeOut(300, function() {
                                         $(this).remove();
                                         self.init();
                                     });
                                 });
                             } catch (error) {
-                                console.log('there was an error getting feed: ', error);
+                                var noPostsMessage = 'There was an error retrieving the feed contents.';
+                                console.log(noPostsMessage, error);
+                                feedLoader.fadeOut(300, function() {
+                                    $(this).remove();
+                                    feedWrapper.fadeIn(300);
+                                    feedWrapper.html(noPostsMessage);
+                                });
                             }
                         }
                     });
                 }
-
-
-
-
-
             });
         }
     };

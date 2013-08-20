@@ -1,0 +1,26 @@
+/* Custom styling for demo */
+.kyco_googleplusfeed {
+    float: left;
+    margin: 0 50px 20px 0;
+}
+
+.gplus2 .kyco_googleplusfeed * {
+    text-align: center;
+}
+
+.gplus2 .kyco_googleplusfeed .feed_header {
+    padding-bottom: 0;
+}
+
+.gplus2 .kyco_googleplusfeed .feed_profile_image {
+    margin-left: 55px;
+    width: 150px; /* should be equal to imgSize */
+    height: 150px; /* should be equal to imgSize */
+}
+
+.gplus2 .kyco_googleplusfeed .feed_screen_name {
+    clear: both;
+    height: 30px;
+    line-height: 20px;
+    padding-top: 10px;
+}
