@@ -3,7 +3,7 @@ jquery.kyco.googleplusfeed
 
 The best Google+ feed widget out there at the moment.
 
-This is a simple Google+ feed widget makes uses http://plusfeed.frosas.net
+This is a simple Google+ feed widget makes use of http://plusfeed.frosas.net
 
 Take a look at the [Demo](http://tr.im/49tpy).
 
