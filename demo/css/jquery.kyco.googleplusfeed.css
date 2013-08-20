@@ -135,7 +135,7 @@
 }
 
 .kyco_googleplusfeed .feed_loader {
-    background: url(demo/images/loader.gif) no-repeat 110px center;
+    background: url(images/loader.gif) no-repeat 110px center;
     padding: 10px 20px;
     text-align: center;
     text-indent: 20px;
