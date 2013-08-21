@@ -141,6 +141,20 @@
     text-indent: 20px;
 }
 
+.kyco_googleplusfeed .error {
+    padding: 10px 0 9px;
+}
+
+.kyco_googleplusfeed .error .retry {
+    color: #222;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.kyco_googleplusfeed .error .retry:hover {
+    text-decoration: underline;
+}
+
 .kyco_googleplusfeed .feed_wrapper {
     display: none; /* Gets set to block once feed has been loaded. */
 }

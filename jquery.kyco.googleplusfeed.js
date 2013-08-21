@@ -93,9 +93,17 @@
                             feedContent.html(str);
                         });
                     } else {
-                        var noPostsMessage = 'Nothing to show.' + googlePlusFeed.screenName + ' has an empty feed.';
+                        var noPostsMessage = 'Nothing to show. Empty feed.';
                         console.log(noPostsMessage);
-                        feedContent.html(noPostsMessage);
+                        feedWrapper.children().remove();
+                        feedWrapper.fadeIn(300);
+                        feedWrapper.html('<div class="error">' + noPostsMessage + ' <span class="retry">Refresh</span></div>');
+                        feedWrapper.find('.retry').click(function() {
+                            feedWrapper.children().remove();
+                            feedWrapper.append(feedLoader);
+                            feedLoader.show();
+                            googlePlusFeed.getFeed();
+                        });
                     }
                 }
 
@@ -108,39 +116,49 @@
                         initFeed();
                     };
 
-                    $.ajax({
-                        // Retrieve RSS feed using a handy Google API
-                        url: 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=' + settings.feedMax + '&callback=?&q=' + encodeURIComponent('http://plusfeed.frosas.net/' + self.id),
-                        dataType: 'json',
-                        success: function(response) {
-                            try {
-                                var title = response.responseData.feed.title;
-                                self.screenName = title.substr(0, (title.indexOf('@') - 1));
+                    self.getFeed = function() {
+                        $.ajax({
+                            // Retrieve RSS feed using a handy Google API
+                            url: 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=' + settings.feedMax + '&callback=?&q=' + encodeURIComponent('http://plusfeed.frosas.net/' + self.id),
+                            dataType: 'json',
+                            success: function(response) {
+                                console.log(response);
+                                try {
+                                    var title = response.responseData.feed.title;
+                                    self.screenName = title.substr(0, (title.indexOf('@') - 1));
 
-                                self.entries = response.responseData.feed.entries;
-                                self.entries.forEach(function(entry) {
-                                    entry.contentSnippet = $(entry.content).first().html(); // Overwrite the default contentSnippet that gets returned with a cleaner version
-                                });
-                                self.raw = response;
+                                    self.entries = response.responseData.feed.entries;
+                                    self.entries.forEach(function(entry) {
+                                        entry.contentSnippet = $(entry.content).first().html(); // Overwrite the default contentSnippet that gets returned with a cleaner version
+                                    });
+                                    self.raw = response;
 
-                                // Preload profile image and only trigger feed thereafter
-                                $('<img src="' + self.image + '"/>').load(function() {
+                                    // Preload profile image and only trigger feed thereafter
+                                    $('<img src="' + self.image + '"/>').load(function() {
+                                        feedLoader.fadeOut(300, function() {
+                                            $(this).remove();
+                                            self.init();
+                                        });
+                                    });
+                                } catch (error) {
+                                    var noPostsMessage = 'Unable to retrieve feed contents.';
+                                    console.log(noPostsMessage, error);
                                     feedLoader.fadeOut(300, function() {
                                         $(this).remove();
-                                        self.init();
+                                        feedWrapper.fadeIn(300);
+                                        feedWrapper.html('<div class="error">' + noPostsMessage + ' <span class="retry">Retry</span></div>');
+                                        feedWrapper.find('.retry').click(function() {
+                                            feedWrapper.children().remove();
+                                            feedWrapper.append(feedLoader);
+                                            feedLoader.show();
+                                            self.getFeed();
+                                        });
                                     });
-                                });
-                            } catch (error) {
-                                var noPostsMessage = 'There was an error retrieving the feed contents.';
-                                console.log(noPostsMessage, error);
-                                feedLoader.fadeOut(300, function() {
-                                    $(this).remove();
-                                    feedWrapper.fadeIn(300);
-                                    feedWrapper.html(noPostsMessage);
-                                });
+                                }
                             }
-                        }
-                    });
+                        });
+                    };
+                    self.getFeed();
                 }
             });
         }

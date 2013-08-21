@@ -135,10 +135,24 @@
 }
 
 .kyco_googleplusfeed .feed_loader {
-    background: url(../images/loader.gif) no-repeat 110px center;
+    background: url(demo/images/loader.gif) no-repeat 110px center;
     padding: 10px 20px;
     text-align: center;
     text-indent: 20px;
+}
+
+.kyco_googleplusfeed .error {
+    padding: 10px 0 9px;
+}
+
+.kyco_googleplusfeed .error .retry {
+    color: #222;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.kyco_googleplusfeed .error .retry:hover {
+    text-decoration: underline;
 }
 
 .kyco_googleplusfeed .feed_wrapper {
