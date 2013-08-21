@@ -122,7 +122,6 @@
                             url: 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=' + settings.feedMax + '&callback=?&q=' + encodeURIComponent('http://plusfeed.frosas.net/' + self.id),
                             dataType: 'json',
                             success: function(response) {
-                                console.log(response);
                                 try {
                                     var title = response.responseData.feed.title;
                                     self.screenName = title.substr(0, (title.indexOf('@') - 1));
