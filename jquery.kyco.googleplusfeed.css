@@ -143,6 +143,7 @@
 
 .kyco_googleplusfeed .error {
     padding: 10px 0 9px;
+    text-align: center;
 }
 
 .kyco_googleplusfeed .error .retry {
