@@ -1,6 +1,6 @@
 /**
  * jquery.kyco.googleplusfeed
- * v1.0.1
+ * v1.0.2
  *
  * Brought to you by http://www.kyco.co.za
  * Copyright 2013 Cornelius Weidmann
@@ -40,9 +40,9 @@
                 var googlePlusFeed = new GoogleFeed(settings.id);
 
                 function initFeed() {
+                    var feedEntries = googlePlusFeed.entries;
+                    var totalPosts = feedEntries.length;
                     var currentPosts = settings.feedPosts;
-                    var totalPosts = googlePlusFeed.entries;
-                    var feedLength = totalPosts.length;
                     var postsIncrement = settings.postsIncrement;
                     var postsLimit = 0;
                     var showMore = false;
@@ -50,7 +50,10 @@
                     var j = currentPosts;
                     var str = '';
 
-                    if (feedLength > 0) {
+                    // Check to see if there are enough user posts to show on first load
+                    currentPosts = totalPosts < currentPosts ? totalPosts : currentPosts;
+
+                    if (totalPosts > 0) {
                         // Posts exist for the given Google+ ID
                         for (; i < currentPosts; i++) {
                             str += stringBuilder(i);
@@ -81,14 +84,14 @@
 
                     // Show more button functionality
                     showMoreButton.click(function() {
-                        if (postsLimit <= feedLength) {
+                        if (postsLimit <= totalPosts) {
                             postsLimit += showMore ? postsIncrement : currentPosts + postsIncrement;
-                            postsLimit = postsLimit > feedLength ? feedLength : postsLimit;
+                            postsLimit = postsLimit > totalPosts ? totalPosts : postsLimit;
 
                             for (; j < postsLimit; j++) {
                                 str += stringBuilder(j);
 
-                                if (j === (feedLength - 1)) {
+                                if (j === (totalPosts - 1)) {
                                     showMoreButton.unbind('click').addClass('link');
                                     showMoreButton.text('View more posts on Google+').click(function() {
                                         window.open(googlePlusFeed.url);
@@ -109,9 +112,9 @@
                         var newStr = '';
 
                         newStr += '<div class="feed_post post_' + (e + 1) + '">';
-                        newStr += '<span>Shared publicly - ' + totalPosts[e].publishedDate.substr(0, 16) + '</span>';
-                        newStr += '<p>' + totalPosts[e].contentSnippet + '</p>';
-                        newStr += '<a href="' + totalPosts[e].link + '" target="_blank">View post</a>';
+                        newStr += '<span>Shared publicly - ' + feedEntries[e].publishedDate.substr(0, 16) + '</span>';
+                        newStr += '<p>' + feedEntries[e].contentSnippet + '</p>';
+                        newStr += '<a href="' + feedEntries[e].link + '" target="_blank">View post</a>';
                         newStr += '</div>';
 
                         return newStr;
