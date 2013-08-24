@@ -1,21 +1,19 @@
-// jquery.kyco.googleplusfeed brought to you by www.kyco.co.za. Copyright 2013 Cornelius Weidmann. Distributed under the GPL.
+/**
+ * jquery.kyco.googleplusfeed
+ * v1.0.1
+ *
+ * Brought to you by http://www.kyco.co.za
+ * Copyright 2013 Cornelius Weidmann
+ * Distributed under the GPL
+ */
 (function($) {
     var methods = {
         init: function(options) {
             var defaults = {
-                feedLoaderClass: 'feed_loader',
-                feedWrapperClass: 'feed_wrapper',
-                feedHeaderClass: 'feed_header',
-                feedScreenNameClass: 'feed_screen_name',
-                feedProfileImageClass: 'feed_profile_image',
-                feedContentClass: 'feed_content',
-                feedPostsContentClass: 'feed_post',
-                feedShowMoreClass: 'feed_sow_more',
-
                 feedPosts: 3, // Feed posts to show on load
-                feedIncrement: 3, // Consecutive number of feed post to show on "show more" button click
-                feedMax: 20, // Max number of posts to pull in total, totalEntries will not go beyond this number, cannot excced 20 because of Google API in use
-                imgSize: 50 // Max is 250
+                postsIncrement: 3, // Number of feed posts to show on "Show more" button click
+                maxPosts: 20, // Max number of posts to pull before "Show more" will go to Google+, cannot excced 20 because of Google API in use
+                profileImageSize: 50 // Max size is 250
             };
 
             var settings = $.extend({}, defaults, options);
@@ -24,93 +22,106 @@
                 var selector = $(this);
 
                 // Create feed DOM elements.
-                var feedContainer = $('<div id="feed_for_' + selector.attr('class') + '"class="kyco_googleplusfeed"></div>');
-                var feedLoader = $('<div class="' + settings.feedLoaderClass + '">Loading...</div>');
-                var feedWrapper = $('<div class="' + settings.feedWrapperClass + '"></div>');
-                var feedHeader =  $('<div class="' + settings.feedHeaderClass + '"></div>');
-                var feedScreenName = $('<h3 class="' + settings.feedScreenNameClass + '"></h3>');
-                var feedProfileImage = $('<a href="#" class="' + settings.feedProfileImageClass + '" target="_blank"></a>');
-                var feedContent = $('<div class="' + settings.feedContentClass + '"></div>');
-                var feedShowMore = $('<span class="' + settings.feedShowMoreClass + '">Show more</span>');
+                var container = $('<div id="feed_' + selector.attr('class') + '" class="kyco_googleplusfeed"></div>');
+                var loader = $('<div class="feed_loader">Loading...</div>');
+                var wrapper = $('<div class="feed_wrapper"></div>');
+                var header =  $('<div class="feed_header"></div>');
+                var screenName = $('<h3 class="feed_screen_name"></h3>');
+                var profileImage = $('<a href="#" class="feed_profile_image" target="_blank"></a>');
+                var content = $('<div class="feed_content"></div>');
+                var showMoreButton = $('<span class="feed_sow_more">Show more</span>');
 
-                feedHeader.append(feedProfileImage, feedScreenName);
-                feedWrapper.append(feedHeader, feedContent, feedShowMore);
-                feedContainer.append(feedLoader, feedWrapper);
-                selector.append(feedContainer);
+                header.append(profileImage, screenName);
+                wrapper.append(header, content, showMoreButton);
+                container.append(loader, wrapper);
+                selector.append(container);
 
                 // Main functionality
                 var googlePlusFeed = new GoogleFeed(settings.id);
 
                 function initFeed() {
-                    var feedEntries = googlePlusFeed.entries;
-                    var totalEntries = feedEntries.length;
-                    var newLimit = 0;
+                    var currentPosts = settings.feedPosts;
+                    var totalPosts = googlePlusFeed.entries;
+                    var feedLength = totalPosts.length;
+                    var postsIncrement = settings.postsIncrement;
+                    var postsLimit = 0;
                     var showMore = false;
                     var i = 0;
-                    var j = settings.feedPosts;
+                    var j = currentPosts;
                     var str = '';
 
-                    if (feedEntries.length > 0) {
-                        for (i; i < settings.feedPosts; i++) {
-                            str += '<div class="' + settings.feedPostsContentClass + ' post_' + (i + 1) + '">';
-                            str += '<span>Shared publicly - ' + feedEntries[i].publishedDate.substr(0, 16) + '</span>';
-                            str += '<p>' + feedEntries[i].contentSnippet + '</p>';
-                            str += '<a href="' + feedEntries[i].link + '" target="_blank">View post</a>';
-                            str += '</div>';
+                    if (feedLength > 0) {
+                        // Posts exist for the given Google+ ID
+                        for (; i < currentPosts; i++) {
+                            str += stringBuilder(i);
                         }
 
-                        feedScreenName.html('<a href="' + googlePlusFeed.url + '" target="_blank">' + googlePlusFeed.screenName + '</a>');
-                        feedProfileImage.attr('href', googlePlusFeed.url);
-                        feedProfileImage.append('<img src="' + googlePlusFeed.image + '" />');
-                        feedContent.html(str);
+                        screenName.html('<a href="' + googlePlusFeed.url + '" target="_blank">' + googlePlusFeed.screenName + '</a>');
+                        profileImage.attr('href', googlePlusFeed.url);
+                        profileImage.append('<img src="' + googlePlusFeed.image + '">');
 
-                        feedContent.animate({scrollTop: 0}, 1); // Force scroll to top of content                        
+                        content.html(str); // Update feed
 
-                        feedWrapper.fadeIn(300);
-                        feedShowMore.click(function() {
-                            if (newLimit <= totalEntries) {
-                                newLimit += showMore ? settings.feedIncrement : settings.feedPosts + settings.feedIncrement;
-                                newLimit = newLimit > totalEntries ? totalEntries : newLimit;
-
-                                for (j; j < newLimit; j++) {
-                                    str += '<div class="' + settings.feedPostsContentClass + ' post_' + (j + 1) + '">';
-                                    str += '<span>Shared publicly - ' + feedEntries[j].publishedDate.substr(0, 16) + '</span>';
-                                    str += '<p>' + feedEntries[j].contentSnippet + '</p>';
-                                    str += '<a href="' + feedEntries[j].link + '" target="_blank">View post</a>';
-                                    str += '</div>';
-
-                                    if (j === (totalEntries - 1)) {
-                                        feedShowMore.unbind('click').addClass('link');
-                                        feedShowMore.text('View more posts on Google+').click(function() {
-                                            window.open(googlePlusFeed.url);
-                                        });
-                                    }
-                                }
-
-                                feedContent.animate({scrollTop: feedContent[0].scrollHeight}, 500);
-                                showMore = true;
-                            }
-                            feedContent.html(str);
-                        });
+                        content.animate({scrollTop: 0}, 1); // Force scroll to top of content                        
+                        wrapper.fadeIn(300); // Show the content
                     } else {
-                        var noPostsMessage = 'Nothing to show. Empty feed.';
-                        console.log(noPostsMessage);
-                        feedWrapper.children().remove();
-                        feedWrapper.fadeIn(300);
-                        feedWrapper.html('<div class="error">' + noPostsMessage + ' <span class="retry">Refresh</span></div>');
-                        feedWrapper.find('.retry').click(function() {
-                            feedWrapper.children().remove();
-                            feedWrapper.append(feedLoader);
-                            feedLoader.show();
-                            googlePlusFeed.getFeed();
+                        // No posts exist for the given Google+ ID
+                        wrapper.children().remove();
+                        wrapper.html('<div class="error">Nothing to show. Empty feed. <span class="retry">Refresh</span></div>');
+                        wrapper.fadeIn(300); // Show the content
+
+                        // Refresh button functionality
+                        wrapper.find('.retry').click(function() {
+                            wrapper.children().remove();
+                            wrapper.append(loader);
+                            loader.show();
+                            googlePlusFeed.getFeed(); // Try again
                         });
+                    }
+
+                    // Show more button functionality
+                    showMoreButton.click(function() {
+                        if (postsLimit <= feedLength) {
+                            postsLimit += showMore ? postsIncrement : currentPosts + postsIncrement;
+                            postsLimit = postsLimit > feedLength ? feedLength : postsLimit;
+
+                            for (; j < postsLimit; j++) {
+                                str += stringBuilder(j);
+
+                                if (j === (feedLength - 1)) {
+                                    showMoreButton.unbind('click').addClass('link');
+                                    showMoreButton.text('View more posts on Google+').click(function() {
+                                        window.open(googlePlusFeed.url);
+                                    });
+                                }
+                            }
+
+                            content.animate({scrollTop: content[0].scrollHeight}, 500);
+                            showMore = true;
+                        }
+
+                        content.html(str); // Update feed
+                    });
+
+
+                    function stringBuilder(e) {
+                        // Generates the HTML for each post
+                        var newStr = '';
+
+                        newStr += '<div class="feed_post post_' + (e + 1) + '">';
+                        newStr += '<span>Shared publicly - ' + totalPosts[e].publishedDate.substr(0, 16) + '</span>';
+                        newStr += '<p>' + totalPosts[e].contentSnippet + '</p>';
+                        newStr += '<a href="' + totalPosts[e].link + '" target="_blank">View post</a>';
+                        newStr += '</div>';
+
+                        return newStr;
                     }
                 }
 
                 function GoogleFeed(id) {
                     var self = this;
                     self.id = id;
-                    self.image = 'https://plus.google.com/s2/photos/profile/' + self.id + '?sz=' + settings.imgSize;
+                    self.image = 'https://plus.google.com/s2/photos/profile/' + self.id + '?sz=' + settings.profileImageSize;
                     self.url = 'https://plus.google.com/' + self.id;
                     self.init = function() {
                         initFeed();
@@ -118,45 +129,48 @@
 
                     self.getFeed = function() {
                         $.ajax({
-                            // Retrieve RSS feed using a handy Google API
-                            url: 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=' + settings.feedMax + '&callback=?&q=' + encodeURIComponent('http://plusfeed.frosas.net/' + self.id),
+                            // Retrieve RSS feed using a handy Google API and http://plusfeed.frosas.net
+                            url: 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=' + settings.maxPosts + '&callback=?&q=' + encodeURIComponent('http://plusfeed.frosas.net/' + self.id),
                             dataType: 'json',
                             success: function(response) {
                                 try {
+                                    // Find and trim data to fit our needs
+                                    self.raw = response; // Used for debugging
                                     var title = response.responseData.feed.title;
                                     self.screenName = title.substr(0, (title.indexOf('@') - 1));
-
                                     self.entries = response.responseData.feed.entries;
-                                    self.entries.forEach(function(entry) {
-                                        entry.contentSnippet = $(entry.content).first().html(); // Overwrite the default contentSnippet that gets returned with a cleaner version
-                                    });
-                                    self.raw = response;
 
-                                    // Preload profile image and only trigger feed thereafter
-                                    $('<img src="' + self.image + '"/>').load(function() {
-                                        feedLoader.fadeOut(300, function() {
-                                            $(this).remove();
+                                    self.entries.forEach(function(entry) {
+                                        // Overwrite the default contentSnippet that gets returned with a cleaner version
+                                        entry.contentSnippet = $(entry.content).first().html();
+                                    });
+
+                                    // Preload profile image and only show content thereafter
+                                    $('<img src="' + self.image + '">').load(function() {
+                                        loader.fadeOut(300, function() {
+                                            loader.remove();
                                             self.init();
                                         });
                                     });
                                 } catch (error) {
-                                    var noPostsMessage = 'Unable to retrieve feed contents.';
-                                    console.log(noPostsMessage, error);
-                                    feedLoader.fadeOut(300, function() {
-                                        $(this).remove();
-                                        feedWrapper.fadeIn(300);
-                                        feedWrapper.html('<div class="error">' + noPostsMessage + ' <span class="retry">Retry</span></div>');
-                                        feedWrapper.find('.retry').click(function() {
-                                            feedWrapper.children().remove();
-                                            feedWrapper.append(feedLoader);
-                                            feedLoader.show();
-                                            self.getFeed();
+                                    loader.fadeOut(300, function() {
+                                        loader.remove();
+                                        wrapper.html('<div class="error">Unable to retrieve feed contents. <span class="retry">Retry</span></div>');
+                                        wrapper.fadeIn(300); // Show the content
+
+                                        // Retry button functionality
+                                        wrapper.find('.retry').click(function() {
+                                            wrapper.children().remove();
+                                            wrapper.append(loader);
+                                            loader.show();
+                                            self.getFeed(); // Try again
                                         });
                                     });
                                 }
                             }
                         });
                     };
+
                     self.getFeed();
                 }
             });

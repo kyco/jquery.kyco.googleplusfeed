@@ -1,4 +1,9 @@
-/* Custom styling for demo */
+/**
+ * jquery.kyco.googleplusfeed brought to you by http://www.kyco.co.za. Copyright 2013 Cornelius Weidmann. Distributed under the GPL.
+ * Go ahead and make your googleplusfeed awesome!
+ */
+
+ /* Custom styling for demo */
 .kyco_googleplusfeed {
     float: left;
     margin: 0 50px 20px 0;
@@ -14,8 +19,8 @@
 
 .gplus2 .kyco_googleplusfeed .feed_profile_image {
     margin-left: 55px;
-    width: 150px; /* should be equal to imgSize */
-    height: 150px; /* should be equal to imgSize */
+    width: 150px; /* should be equal to profileImageSize */
+    height: 150px; /* should be equal to profileImageSize */
 }
 
 .gplus2 .kyco_googleplusfeed .feed_screen_name {
