@@ -12,8 +12,8 @@ How to install
 
 Download the js file and include it in your head after including jquery:
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"><script>
-    <script src="jquery.kyco.googleplusfeed.min.js"><script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="jquery.kyco.googleplusfeed.min.js"></script>
 
 Also include the css file and grab the loader.gif from the demo directory:
 
@@ -22,17 +22,21 @@ Also include the css file and grab the loader.gif from the demo directory:
 Create a div to hold the feed and then pull the feed into it by calling the 
 kycoGooglePlusFeed method with the specified Google+ ID:
 
+    <div class="mydiv"></div>
+    
     <script>
-        $(document).ready(function() {
+        $(function() {
             $('.mydiv').kycoGooglePlusFeed('116899029375914044550');
         });
     </script>
 
 What a customisation looks like:
 
+    <div class="mydiv2"></div>
+    
     <script>
-        $(document).ready(function() {
-            $('.mydiv').kycoGooglePlusFeed({
+        $(function() {
+            $('.mydiv2').kycoGooglePlusFeed({
                 id: '116899029375914044550',
                 feedPosts: 2,
                 postsIncrement: 1,
@@ -46,7 +50,7 @@ What a customisation looks like:
 Configuration - kycoGooglePlusFeed({ <em>options</em> })
 -------------------------------------------------
 
-    id: /* Google+ ID */
+    id: /* Google+ ID */,
 
 The Google+ ID used to generate the feed.
 
