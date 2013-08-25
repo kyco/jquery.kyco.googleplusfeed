@@ -12,7 +12,7 @@
             var defaults = {
                 feedPosts: 3, // Feed posts to show on load
                 postsIncrement: 3, // Number of feed posts to show on "Show more" button click
-                maxPosts: 20, // Max number of posts to pull before "Show more" will go to Google+, cannot excced 20 because of Google API in use
+                maxPosts: 20, // Max number of posts to pull before "Show more" will go to Google+, cannot exceed 20 because of Google API in use
                 profileImageSize: 50 // Max size is 250
             };
 
