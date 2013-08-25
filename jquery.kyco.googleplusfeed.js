@@ -26,10 +26,12 @@
                 var loader = $('<div class="feed_loader">Loading...</div>');
                 var wrapper = $('<div class="feed_wrapper"></div>');
                 var header =  $('<div class="feed_header"></div>');
-                var screenName = $('<h3 class="feed_screen_name"></h3>');
+                var screenName = $('<h3 class="feed_screen_name"><a href="#" target="_blank"></a></h3>');
                 var profileImage = $('<a href="#" class="feed_profile_image" target="_blank"></a>');
                 var content = $('<div class="feed_content"></div>');
                 var showMoreButton = $('<span class="feed_sow_more">Show more</span>');
+                var errorMessage = $('<div class="error"></div>');
+                var retryButton = $('<span class="retry"></span>')
 
                 header.append(profileImage, screenName);
                 wrapper.append(header, content, showMoreButton);
@@ -59,7 +61,7 @@
                             str += stringBuilder(i);
                         }
 
-                        screenName.html('<a href="' + googlePlusFeed.url + '" target="_blank">' + googlePlusFeed.screenName + '</a>');
+                        screenName.children('a').attr('href', googlePlusFeed.url).text(googlePlusFeed.screenName);
                         profileImage.attr('href', googlePlusFeed.url);
                         profileImage.append('<img src="' + googlePlusFeed.image + '">');
 
@@ -70,7 +72,10 @@
                     } else {
                         // No posts exist for the given Google+ ID
                         wrapper.children().remove();
-                        wrapper.html('<div class="error">Nothing to show. Empty feed. <span class="retry">Refresh</span></div>');
+                        errorMessage.text('Nothing to show. Empty feed. ');
+                        retryButton.text('Refresh');
+                        errorMessage.append(retryButton);
+                        wrapper.append(errorMessage);
                         wrapper.fadeIn(300); // Show the content
 
                         // Refresh button functionality
@@ -157,8 +162,11 @@
                                     });
                                 } catch (error) {
                                     loader.fadeOut(300, function() {
-                                        loader.remove();
-                                        wrapper.html('<div class="error">Unable to retrieve feed contents. <span class="retry">Retry</span></div>');
+                                        wrapper.children().remove();
+                                        errorMessage.text('Unable to retrieve feed contents. ');
+                                        retryButton.text('Retry');
+                                        errorMessage.append(retryButton);
+                                        wrapper.append(errorMessage);
                                         wrapper.fadeIn(300); // Show the content
 
                                         // Retry button functionality
