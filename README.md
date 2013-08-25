@@ -25,7 +25,7 @@ kycoGooglePlusFeed method with the specified Google+ ID:
     <div class="mydiv"></div>
     
     <script>
-        $(function() {
+        $(document).ready(function() {
             $('.mydiv').kycoGooglePlusFeed('116899029375914044550');
         });
     </script>
@@ -35,7 +35,7 @@ What a customisation looks like:
     <div class="mydiv2"></div>
     
     <script>
-        $(function() {
+        $(document).ready(function() {
             $('.mydiv2').kycoGooglePlusFeed({
                 id: '116899029375914044550',
                 feedPosts: 2,
