@@ -25,6 +25,8 @@
 
 			return this.each(function() {
 				var selector = $(this);
+
+				// Localization
 				settings.lang = settings.lang === 'en' ? {
 					langCode: 'en',
 					loading: 'Loading...',
