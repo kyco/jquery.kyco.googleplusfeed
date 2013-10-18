@@ -1,7 +1,7 @@
 /*********************************************\
 
 	jquery.kyco.googleplusfeed
-	v1.0.2
+	v1.0.3
 
 	Brought to you by http://www.kyco.co.za
 	Copyright 2013 Cornelius Weidmann
@@ -17,23 +17,47 @@
 				feedPosts: 3, // Feed posts to show on load
 				postsIncrement: 3, // Number of feed posts to show on "Show more" button click
 				maxPosts: 20, // Max number of posts to pull before "Show more" will go to Google+, cannot exceed 20 because of Google API in use
-				profileImageSize: 50 // Max size is 250
+				profileImageSize: 50, // Max size is 250
+				lang: 'en' // Default language, can also be set to 'de'
 			};
 
 			var settings = $.extend({}, defaults, options);
 
 			return this.each(function() {
 				var selector = $(this);
+				settings.lang = settings.lang === 'en' ? {
+					langCode: 'en',
+					loading: 'Loading...',
+					showMore: 'Show more',
+					viewMore: 'View more posts on Google+',
+					shared: 'Shared publicly - ',
+					viewPost: 'View post',
+					errorEmpty: 'Nothing to show. Empty feed. ',
+					retryEmpty: 'Refresh',
+					errorGeneral: 'Unable to retrieve feed contents. ',
+					retryGeneral: 'Retry'
+				} : {
+					langCode: 'de',
+					loading: 'Wird geladen...',
+					showMore: 'Mehr anzeigen',
+					viewMore: 'Weitere Beiträge ansehen bei Google+',
+					shared: 'Öffentlich geteilt - ',
+					viewPost: 'Beitrag ansehen',
+					errorEmpty: 'Nichts zu sehen. Keine Beiträge. ',
+					retryEmpty: 'Wiederholen',
+					errorGeneral: 'Es ist ein Fehler beim abrufen der Beiträge erfolgt. ',
+					retryGeneral: 'Wiederholen'
+				};
 
 				// Create feed DOM elements.
-				var container = $('<div id="feed_' + selector.attr('class') + '" class="kyco_googleplusfeed"></div>');
-				var loader = $('<div class="feed_loader">Loading...</div>');
+				var container = $('<div id="feed_' + selector.attr('class') + '" class="kyco_googleplusfeed ' + settings.lang.langCode + '"></div>');
+				var loader = $('<div class="feed_loader">' + settings.lang.loading + '</div>');
 				var wrapper = $('<div class="feed_wrapper"></div>');
 				var header =  $('<div class="feed_header"></div>');
 				var screenName = $('<h3 class="feed_screen_name"><a href="#" target="_blank"></a></h3>');
 				var profileImage = $('<a href="#" class="feed_profile_image" target="_blank"></a>');
 				var content = $('<div class="feed_content"></div>');
-				var showMoreButton = $('<span class="feed_sow_more">Show more</span>');
+				var showMoreButton = $('<span class="feed_sow_more">' + settings.lang.showMore + '</span>');
 				var errorMessage = $('<div class="error"></div>');
 				var retryButton = $('<span class="retry"></span>')
 
@@ -76,8 +100,8 @@
 					} else {
 						// No posts exist for the given Google+ ID
 						wrapper.children().remove();
-						errorMessage.text('Nothing to show. Empty feed. ');
-						retryButton.text('Refresh');
+						errorMessage.text(settings.lang.errorEmpty);
+						retryButton.text(settings.lang.retryEmpty);
 						errorMessage.append(retryButton);
 						wrapper.append(errorMessage);
 						wrapper.fadeIn(300); // Show the content
@@ -102,7 +126,7 @@
 
 								if (j === (totalPosts - 1)) {
 									showMoreButton.unbind('click').addClass('link');
-									showMoreButton.text('View more posts on Google+').click(function() {
+									showMoreButton.text(settings.lang.viewMore).click(function() {
 										window.open(googlePlusFeed.url);
 									});
 								}
@@ -121,12 +145,37 @@
 						var newStr = '';
 
 						newStr += '<div class="feed_post post_' + (e + 1) + '">';
-						newStr += '<span>Shared publicly - ' + feedEntries[e].publishedDate.substr(0, 16) + '</span>';
+						newStr += '<span>' + settings.lang.shared + formatTime(e, settings.lang.langCode) + '</span>';
 						newStr += '<p>' + feedEntries[e].contentSnippet + '</p>';
-						newStr += '<a href="' + feedEntries[e].link + '" target="_blank">View post</a>';
+						newStr += '<a href="' + feedEntries[e].link + '" target="_blank">' + settings.lang.viewPost + '</a>';
 						newStr += '</div>';
 
 						return newStr;
+					}
+
+					function formatTime(e, lang) {
+						// Generates language friendly time strings
+						var formattedTime = '';
+						var abbreviatedMonths = [
+							'Jan', 'Feb', 'Mar',
+							'Apr', 'May', 'Jun',
+							'Jul', 'Aug', 'Sep',
+							'Oct', 'Nov', 'Dec'
+						];
+						var monthsToNum = [
+							'01', '02', '03',
+							'04', '05', '06',
+							'07',' 08', '09',
+							'10', '11', '12'
+						];
+
+						if (lang === 'en') {
+							formattedTime = feedEntries[e].publishedDate.substr(0, 16);
+						} else {
+							var timeArray = $.trim(feedEntries[e].publishedDate.substr(0, 16).split(',')[1]).split(' ');
+							formattedTime = timeArray[0] + '.' + monthsToNum[abbreviatedMonths.indexOf(timeArray[1])] + '.' + timeArray[2];
+						}
+						return formattedTime;
 					}
 				}
 
@@ -167,8 +216,8 @@
 								} catch (error) {
 									loader.fadeOut(300, function() {
 										wrapper.children().remove();
-										errorMessage.text('Unable to retrieve feed contents. ');
-										retryButton.text('Retry');
+										errorMessage.text(settings.lang.errorGeneral);
+										retryButton.text(settings.lang.retryGeneral);
 										errorMessage.append(retryButton);
 										wrapper.append(errorMessage);
 										wrapper.fadeIn(300); // Show the content

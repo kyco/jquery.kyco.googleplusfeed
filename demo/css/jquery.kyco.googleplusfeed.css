@@ -1,7 +1,7 @@
 /*********************************************\
 
 	jquery.kyco.googleplusfeed
-	v1.0.2
+	v1.0.3
 
 	Brought to you by http://www.kyco.co.za
 	Copyright 2013 Cornelius Weidmann
@@ -143,10 +143,18 @@
 }
 
 .kyco_googleplusfeed .feed_loader {
-	background: url(../images/loader.gif) no-repeat 110px center;
+	background: url(demo/images/loader.gif) no-repeat 110px center;
 	padding: 10px 20px;
 	text-align: center;
 	text-indent: 20px;
+}
+
+.kyco_googleplusfeed.en .feed_loader {
+	background-position: 110px center;
+}
+
+.kyco_googleplusfeed.de .feed_loader {
+	background-position: 95px center;
 }
 
 .kyco_googleplusfeed .error {

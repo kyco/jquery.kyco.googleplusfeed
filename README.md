@@ -41,7 +41,8 @@ What a customisation looks like:
 				feedPosts: 2,
 				postsIncrement: 1,
 				maxPosts: 5,
-				profileImageSize: 150
+				profileImageSize: 150,
+				lang: 'de'
 			});
 		});
 	</script>
@@ -67,9 +68,13 @@ Number of feed posts to show on "Show more" button click.
 Max number of posts to pull before "Show more" will go to Google+, cannot exceed 20 
 because of Google API in use.
 
-	profileImageSize: 50
+	profileImageSize: 50,
 
 Image size of the profile image, max size is 250. Also adjust css if changing the default.
+
+	lang: 'en'
+
+Default language is English, can also be set to German - 'de'.
 
 
 Styling
