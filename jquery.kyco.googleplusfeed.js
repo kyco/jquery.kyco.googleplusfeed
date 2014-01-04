@@ -47,7 +47,7 @@
 					viewPost: 'Beitrag ansehen',
 					errorEmpty: 'Nichts zu sehen. Keine Beiträge. ',
 					retryEmpty: 'Wiederholen',
-					errorGeneral: 'Es ist ein Fehler beim abrufen der Beiträge erfolgt. ',
+					errorGeneral: 'Es ist ein Fehler beim Abrufen der Beiträge aufgetreten. ',
 					retryGeneral: 'Wiederholen'
 				};
 
