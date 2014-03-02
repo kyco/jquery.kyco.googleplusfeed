@@ -5,7 +5,7 @@ The best Google+ feed widget out there!
 
 This is a simple Google+ feed widget which makes use of http://plusfeed.frosas.net
 
-Take a look at the [demo](http://tr.im/49tpy).
+Take a look at the [demo](http://www.kycosoftware.com/projects/demo/googleplus-feed-widget/).
 
 How to install
 --------------
@@ -87,4 +87,4 @@ a spinner to appear while the feed is loading.
 Support
 -------
 
-For bugs or improvements please use the issues tab or email info@kyco.co.za.
+For bugs or improvements please email [info@kycosoftware.com](mailto:info@kycosoftware.com).
