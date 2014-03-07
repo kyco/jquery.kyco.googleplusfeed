@@ -5,7 +5,7 @@ The best Google+ feed widget out there!
 
 This is a simple Google+ feed widget which makes use of [http://plusfeed.frosas.net](http://plusfeed.frosas.net).
 
-Take a look at the [demo](http://www.kycosoftware.com/projects/demo/googleplus-feed-widget/).
+Take a look at the [demo](http://www.kycosoftware.com/projects/demo/googleplus-feed-widget).
 
 How to install
 --------------
