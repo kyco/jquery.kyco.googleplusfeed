@@ -1,11 +1,15 @@
 /*********************************************\
 
 	jquery.kyco.googleplusfeed
-	v1.0.3
+	==========================
 
-	Brought to you by http://www.kycosoftware.com
+	Version 1.0.3
+
+	Brought to you by
+	http://www.kycosoftware.com/
+
 	Copyright 2013 Cornelius Weidmann
-	
+
 	Distributed under the GPL
 
 \*********************************************/
