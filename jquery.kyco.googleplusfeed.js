@@ -3,7 +3,7 @@
 	jquery.kyco.googleplusfeed
 	==========================
 
-	Version 1.0.3
+	Version 1.0.4
 
 	Brought to you by
 	http://www.kycosoftware.com/
@@ -97,11 +97,11 @@
 
 						screenName.children('a').attr('href', googlePlusFeed.url).text(googlePlusFeed.screenName);
 						profileImage.attr('href', googlePlusFeed.url);
-						profileImage.append('<img src="' + googlePlusFeed.image + '">');
+						profileImage.append('<img src="' + googlePlusFeed.image + '" width="' + settings.profileImageSize + '" height="' + settings.profileImageSize + '">');
 
 						content.html(str); // Update feed
 
-						content.animate({scrollTop: 0}, 1); // Force scroll to top of content                        
+						content.animate({scrollTop: 0}, 1); // Force scroll to top of content
 						wrapper.fadeIn(300); // Show the content
 					} else {
 						// No posts exist for the given Google+ ID
@@ -212,11 +212,16 @@
 										entry.contentSnippet = $(entry.content).first().html();
 									});
 
-									// Preload profile image and only show content thereafter
-									$('<img src="' + self.image + '">').load(function() {
-										loader.fadeOut(300, function() {
-											loader.remove();
-											self.init();
+									// Check if image URL exists, error handling for 404s
+									$.get(self.image).fail(function() {
+										self.image = 'http://www.kycosoftware.com/images/general/googleplus-404.png';
+									}).always(function() {
+										// Preload profile image and only show content thereafter
+										$('<img src="' + self.image + '">').load(function() {
+											loader.fadeOut(300, function() {
+												loader.remove();
+												self.init();
+											});
 										});
 									});
 								} catch (error) {

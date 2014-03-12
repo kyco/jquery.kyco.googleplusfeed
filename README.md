@@ -1,6 +1,6 @@
 jquery.kyco.googleplusfeed
 ==========================
-####Version: 1.0.3
+####Version: 1.0.4
 
 The best Google+ feed widget out there!
 
