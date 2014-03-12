@@ -90,4 +90,4 @@ Support
 -------
 
 For bugs or improvements please use the [issues tab](https://github.com/kyco/jquery.kyco.googleplusfeed/issues)
-on github or email [support@kycosoftware.com](mailto:support@kycosoftware.com).
+or email [support@kycosoftware.com](mailto:support@kycosoftware.com).
