@@ -51,16 +51,32 @@ What a customisation looks like:
 
 
 Configuration - kycoGooglePlusFeed({ *options* })
-----------------------------------------------------
+-------------------------------------------------
 
-Param				| Default		| Details
---------------------|---------------|------------------------------------------------------------------------------------------------------------------
-id					| *none*		| The Google+ ID used to generate the feed.
-feedPosts			| 3				| Feed posts to show on load.
-postsIncrement		| 3				| Number of feed posts to show on "Show more" button click.
-maxPosts			| 20			| Max number of posts to pull before "Show more" will go to Google+, cannot exceed 20 because of Google API in use.
-profileImageSize	| 50			| Image size of the profile image, max size is 250. Also adjust css if changing the default.
-lang				| 'en'			| Default language is English, can also be set to German - 'de'.
+	id: /* Google+ ID */,
+
+The Google+ ID used to generate the feed.
+
+	feedPosts: 3,
+
+Feed posts to show on load.
+
+	postsIncrement: 3,
+
+Number of feed posts to show on "Show more" button click.
+
+	maxPosts: 20,
+
+Max number of posts to pull before "Show more" will go to Google+, cannot exceed 20 
+because of Google API in use.
+
+	profileImageSize: 50,
+
+Image size of the profile image, max size is 250. Also adjust css if changing the default.
+
+	lang: 'en'
+
+Default language is English, can also be set to German - 'de'.
 
 
 Styling
