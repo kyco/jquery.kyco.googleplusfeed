@@ -8,6 +8,8 @@ This is a simple Google+ feed widget which makes use of [plusfeed.frosas.net](ht
 
 Take a look at the [demo](http://www.kycosoftware.com/projects/demo/googleplus-feed-widget).
 
+NOTE: Since March 2014 the profile images are no longer pulling through (Google changed the way images are accessed via third parties). I am currently working on a v2 which will once again pull through the profile images.
+
 
 How to install
 --------------
