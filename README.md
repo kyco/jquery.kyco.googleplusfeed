@@ -1,14 +1,16 @@
 jquery.kyco.googleplusfeed
 ==========================
-####Version: 1.0.4
 
-The best Google+ feed widget out there!
+The previously best Google+ feed widget out there!
+###NOTE: This plugin is no longer supported. A more awesome [jquery.kyco.googleplusfeed2](https://github.com/kyco/jquery.kyco.googleplusfeed2) has taken its place!
+
+#####Last version: 1.0.4
 
 This is a simple Google+ feed widget which makes use of [plusfeed.frosas.net](http://plusfeed.frosas.net/).
 
 Take a look at the [demo](http://www.kycosoftware.com/projects/demo/googleplus-feed-widget).
 
-NOTE: Since March 2014 the profile images are no longer pulling through (Google changed the way images are accessed via third parties). I am currently working on a v2 which will once again pull through the profile images.
+NOTE: Since March 2014 the profile images are no longer pulling through. Google changed the way images are accessed via third parties. [Version 2](https://github.com/kyco/jquery.kyco.googleplusfeed2) no longer makes use of third parties and directly hooks into the Google+ API.
 
 
 How to install
