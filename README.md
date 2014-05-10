@@ -1,5 +1,5 @@
-jquery.kyco.googleplusfeed
-==========================
+kyco Google+ Feed
+=================
 
 The previously best Google+ feed widget out there!
 ###NOTE: This plugin is no longer supported. A more awesome [jquery.kyco.googleplusfeed2](https://github.com/kyco/jquery.kyco.googleplusfeed2) has taken its place!
