@@ -8,4 +8,4 @@ The previously best Google+ feed widget out there!
 
 This is a simple Google+ feed widget which makes use of [plusfeed.frosas.net](http://plusfeed.frosas.net/).
 
-Take a look at the [demo](http://www.kycosoftware.com/projects/demo/googleplus-feed-widget).
+Take a look at the [demo](http://kyco.github.io/jquery.kyco.googleplusfeed/).
