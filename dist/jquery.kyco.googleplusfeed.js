@@ -1,18 +1,14 @@
-/***************************************\
-
-	jquery.kyco.googleplusfeed
-	==========================
-
-	Version 1.0.4
-
-	Brought to you by
-	http://www.kycosoftware.com/
-
-	Copyright 2014 Cornelius Weidmann
-
-	Distributed under the GPL
-
-\***************************************/
+/*
+**
+**  jquery.kyco.googleplusfeed
+**  ==========================
+**
+**  Version 1.0.4
+**
+**  Brought to you by
+**  https://kyco.io
+**
+*/
 
 (function($) {
 	var methods = {
