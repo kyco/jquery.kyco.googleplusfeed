@@ -5,9 +5,7 @@ kyco Google+ Feed
 
 The previously best Google+ feed widget out there!
 
-### NOTE: This plugin is no longer supported.
-
-For a version which will still be supported please use [jquery.kyco.googleplusfeed2](https://github.com/kyco/jquery.kyco.googleplusfeed2).
+### NOTE: This plugin is no longer supported. Its successor is [jquery.kyco.googleplusfeed2](https://github.com/kyco/jquery.kyco.googleplusfeed2).
 
 This is a simple Google+ feed widget which makes use of [plusfeed.frosas.net](http://plusfeed.frosas.net/).
 
