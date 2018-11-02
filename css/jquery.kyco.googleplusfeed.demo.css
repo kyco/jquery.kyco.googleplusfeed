@@ -1,20 +1,8 @@
-/***************************************\
-
-	jquery.kyco.googleplusfeed
-	==========================
-
-	Version 1.0.4
-
-	Brought to you by
-	http://www.kycosoftware.com/
-
-	Copyright 2014 Cornelius Weidmann
-
-	Distributed under the GPL
-
-\***************************************/
-
 /* Custom styling for demo */
+
+body {
+	font-family: monospace;
+}
 
 .kyco_googleplusfeed {
 	float: left;
